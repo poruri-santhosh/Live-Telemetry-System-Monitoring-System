@@ -34,8 +34,8 @@ connectDB()
     console.warn('⚠️ [Database] Initial connection notice:', err.message);
   });
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check endpoint (matches both /api/health and /health)
+app.get(['/api/health', '/health'], (req, res) => {
   res.json({
     status: 'ONLINE',
     system: 'Live Telemetry & System Monitoring System',
@@ -46,8 +46,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Telemetry API routes
+// Telemetry API routes (matches both /api/telemetry and /telemetry for Vercel serverless routing)
 app.use('/api/telemetry', telemetryRoutes);
+app.use('/telemetry', telemetryRoutes);
 
 // Serve static frontend build if present (Unified monolithic deployment)
 const rootDistPath = path.join(__dirname, '../dist');
